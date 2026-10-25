@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de defensa de Diego</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: columna de lectura de ~70ch con navegación fija por secciones; las matrices y el código son los únicos bloques anchos. */
+:root {
+  --paper: #f6f6fb;
+  --sheet: #ffffff;
+  --ink: #181a2e;
+  --muted: #59607a;
+  --line: #dddff0;
+  --violet: #5b4cf0;
+  --violet-soft: #ecebff;
+  --ok: #12804a;
+  --ok-soft: #e3f6ec;
+  --warn: #946000;
+  --warn-soft: #fff3d2;
+  --bad: #b3261e;
+  --bad-soft: #ffe9e7;
+  --code: #eff0f8;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", Consolas, ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10111d; --sheet: #171928; --ink: #e9eaf6; --muted: #a2a7c2; --line: #2b2e46;
+    --violet: #a59cff; --violet-soft: #26244a; --ok: #5fd394; --ok-soft: #143426; --warn: #f2c25a;
+    --warn-soft: #3a2f12; --bad: #ff8f86; --bad-soft: #3d1c1a; --code: #1f2236; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10111d; --sheet: #171928; --ink: #e9eaf6; --muted: #a2a7c2; --line: #2b2e46;
+  --violet: #a59cff; --violet-soft: #26244a; --ok: #5fd394; --ok-soft: #143426; --warn: #f2c25a;
+  --warn-soft: #3a2f12; --bad: #ff8f86; --bad-soft: #3d1c1a; --code: #1f2236; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: 16px/1.6 var(--f-body);
+  padding-inline: 16px;
+  padding-block: 0 64px;
+}
+.wrap { max-width: 760px; margin-inline: auto; display: flex; flex-direction: column; gap: 56px; }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.12; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.1rem, 6vw, 3rem); font-weight: 800; letter-spacing: -0.02em; }
+h2 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: 1.12rem; font-weight: 600; }
+p { margin: 0; }
+code, .mono { font-family: var(--f-mono); font-size: 0.9em; }
+:not(pre) > code { background: var(--code); padding: 0.1em 0.35em; border-radius: 4px; }
+pre { margin: 0; overflow-x: auto; background: var(--code); border-radius: 10px; padding: 14px 16px; font: 0.86rem/1.55 var(--f-mono); }
+a { color: var(--violet); }
+.eyebrow { font: 600 0.74rem var(--f-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--violet); }
+.muted { color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+
+/* Encabezado y navegación */
+header.top { display: flex; flex-direction: column; gap: 14px; padding-top: 40px; }
+.role { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--sheet); border-radius: 999px; padding: 3px 11px; font-size: 0.84rem; color: var(--muted); }
+.chip b { color: var(--ink); font-weight: 600; }
+nav.toc {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: flex; gap: 4px; overflow-x: auto; padding: 10px 0;
+  background: var(--paper); border-bottom: 1px solid var(--line);
+}
+nav.toc a {
+  flex: none; text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.92rem;
+  padding: 6px 12px; border-radius: 8px;
+}
+nav.toc a:hover, nav.toc a:focus-visible { background: var(--violet-soft); color: var(--violet); outline: none; }
+
+section { display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 64px; }
+.lead { font-size: 1.05rem; color: var(--muted); max-width: 65ch; }
+
+/* Temario */
+.topics { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+.topic { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.topic input { margin-top: 5px; width: 18px; height: 18px; accent-color: var(--violet); }
+.topic label { font-weight: 600; cursor: pointer; }
+.topic .body { grid-column: 2; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.topic ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.topic .file { font: 0.8rem var(--f-mono); color: var(--muted); }
+.topic.done label { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--violet); }
+
+/* Matrices del ejemplo */
+.steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.step { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.step b { font: 600 0.9rem var(--f-mono); color: var(--violet); }
+table.m { border-collapse: collapse; font: 0.88rem var(--f-mono); font-variant-numeric: tabular-nums; border-left: 2px solid var(--violet); border-right: 2px solid var(--violet); }
+table.m td { padding: 2px 8px; text-align: right; }
+table.m td.rhs { border-left: 1.5px solid var(--muted); }
+table.m tr.hl td { background: var(--warn-soft); }
+
+.callout { border-radius: 10px; padding: 14px 16px; background: var(--violet-soft); }
+.callout.ok { background: var(--ok-soft); }
+.callout.warn { background: var(--warn-soft); }
+.callout.bad { background: var(--bad-soft); }
+
+/* Clasificación */
+.classes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.class { border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.class h3 { font-size: 1rem; }
+.class.ok { background: var(--ok-soft); } .class.ok h3 { color: var(--ok); }
+.class.warn { background: var(--warn-soft); } .class.warn h3 { color: var(--warn); }
+.class.bad { background: var(--bad-soft); } .class.bad h3 { color: var(--bad); }
+
+/* Guion */
+ol.script { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; counter-reset: s; }
+ol.script > li { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); gap: 14px; padding: 18px 0; border-top: 1px solid var(--line); }
+.time { font: 600 0.82rem var(--f-mono); color: var(--violet); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.say { font-size: 1.04rem; border-left: 3px solid var(--violet); padding-left: 12px; }
+.do { font-size: 0.9rem; color: var(--muted); }
+.do::before { content: "En pantalla: "; font-weight: 600; color: var(--ink); }
+
+/* Preguntas */
+.qbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 52px); z-index: 4; background: var(--paper); padding: 8px 0; }
+.filter { border: 1px solid var(--line); background: var(--sheet); color: var(--ink); border-radius: 999px; padding: 6px 12px; font: 500 0.88rem var(--f-body); cursor: pointer; }
+.filter[aria-pressed="true"] { background: var(--violet); border-color: var(--violet); color: var(--sheet); }
+.btn { border: 0; background: var(--ink); color: var(--paper); border-radius: 8px; padding: 8px 14px; font: 600 0.9rem var(--f-body); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--violet); border: 1px solid var(--violet); }
+.progress { margin-left: auto; font: 0.85rem var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
+
+.qlist { display: flex; flex-direction: column; gap: 10px; }
+details.q { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; }
+details.q[open] { border-color: var(--violet); }
+details.q.known { border-left: 4px solid var(--ok); }
+details.q summary { list-style: none; cursor: pointer; padding: 14px 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: start; }
+details.q summary::-webkit-details-marker { display: none; }
+.qtext { font-weight: 600; }
+.qtag { font: 0.72rem var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); grid-column: 1; }
+.lvl { font: 600 0.72rem var(--f-mono); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.lvl.b { background: var(--ok-soft); color: var(--ok); }
+.lvl.m { background: var(--warn-soft); color: var(--warn); }
+.lvl.d { background: var(--bad-soft); color: var(--bad); }
+.answer { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+.answer .tip { font-size: 0.9rem; color: var(--muted); }
+.answer .tip b { color: var(--ink); }
+.know { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; }
+.know input { width: 18px; height: 18px; accent-color: var(--ok); }
+
+footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+@media (max-width: 520px) {
+  ol.script > li { grid-template-columns: 1fr; gap: 6px; }
+  .progress { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Gauss-Jordan paso a paso · Defensa</span>
+    <h1>Guía de defensa de Diego</h1>
+    <p class="lead">Lo que necesitas saber para explicar tu parte: el algoritmo, la aritmética exacta, la clasificación del sistema y la API de resolución. Incluye un guion de unos 6 minutos y preguntas para practicar con la respuesta oculta.</p>
+    <div class="role">
+      <span class="chip">Rol <b>Tech Lead</b></span>
+      <span class="chip">Módulo <b>Algoritmo y API de resolución</b></span>
+      <span class="chip">Endpoints <b>/solve · /health</b></span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Secciones">
+    <a href="#estudiar">Qué estudiar</a>
+    <a href="#ejemplo">Ejemplo 3×3</a>
+    <a href="#guion">Guion</a>
+    <a href="#preguntas">Preguntas</a>
+  </nav>
+
+  <!-- ─────────────── QUÉ ESTUDIAR ─────────────── -->
+  <section id="estudiar" aria-labelledby="h-estudiar">
+    <span class="eyebrow">Parte 1</span>
+    <h2 id="h-estudiar">Qué estudiar</h2>
+    <p class="lead">Ordenado de lo más importante a lo menos. Marca cada tema cuando puedas explicarlo en voz alta sin leer; se guarda en este navegador.</p>
+
+    <div class="topics" id="topics">
+      <div class="topic" data-id="t1">
+        <input type="checkbox" id="t1">
+        <label for="t1">El método de Gauss-Jordan y las 3 operaciones elementales</label>
+        <div class="body">
+          <ul>
+            <li><b>Intercambio</b> F<sub>i</sub> ↔ F<sub>j</sub> (<code>swap</code>), <b>escalamiento</b> F<sub>i</sub> → k·F<sub>i</sub> con k ≠ 0 (<code>scale</code>), <b>eliminación</b> F<sub>i</sub> → F<sub>i</sub> − k·F<sub>j</sub> (<code>eliminate</code>).</li>
+            <li>Ninguna cambia el conjunto de soluciones: cada una se puede deshacer (es invertible).</li>
+            <li>Diferencia con Gauss: Gauss deja la matriz escalonada y luego hace sustitución hacia atrás; Gauss-Jordan hace ceros <i>arriba y abajo</i> del pivote hasta la <b>forma escalonada reducida</b> (RREF), y la solución se lee directo.</li>
+          </ul>
+          <span class="file">GaussJordanService::solveDimensions()</span>
+        </div>
+      </div>
+
+      <div class="topic" data-id="t2">
+        <input type="checkbox" id="t2">
+        <label for="t2">La estrategia exacta de tu código, columna por columna</label>
+        <div class="body">
+          <ul>
+            <li>Para cada columna de coeficientes, de izquierda a derecha, busca el <b>primer valor distinto de cero</b> desde la fila pivote hacia abajo.</li>
+            <li>Si no hay ninguno: esa columna no tiene pivote, es una <b>variable libre</b>, y pasa a la siguiente.</li>
+            <li>Si el valor está en otra fila: <b>intercambia</b>. Si el pivote no es 1: <b>multiplica la fila por su recíproco</b>. Luego <b>elimina</b> todos los demás valores de la columna.</li>
+            <li>Al final, mueve las filas contradictorias (0 = k) antes de las filas 0 = 0 (<code>moveContradictionsBeforeZeroRows</code>).</li>
+            <li>El número de pivotes encontrados es el <b>rango</b> de A.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="topic" data-id="t3">
+        <input type="checkbox" id="t3">
+        <label for="t3">Clasificación con rangos (teorema de Rouché–Frobenius)</label>
+        <div class="body">
+          <ul>
+            <li><b>Única</b>: rango(A) = rango([A|b]) = n (número de incógnitas).</li>
+            <li><b>Infinitas</b>: rango(A) = rango([A|b]) &lt; n. Variables libres = n − rango.</li>
+            <li><b>Sin solución</b>: rango(A) &lt; rango([A|b]); aparece una fila 0 = k con k ≠ 0.</li>
+            <li>En el código: si después del último pivote hay una fila con término independiente ≠ 0 → inconsistente; si rango = columnas → única; si no → infinitas.</li>
+          </ul>
+          <span class="file">SystemClassification.php · buildResult()</span>
+        </div>
+      </div>
+
+      <div class="topic" data-id="t4">
+        <input type="checkbox" id="t4">
+        <label for="t4">Aritmética racional exacta (RationalNumber)</label>
+        <div class="body">
+          <ul>
+            <li>Cada número es numerador/denominador con enteros de precisión arbitraria (<code>brick/math BigInteger</code>): sin redondeo y sin desbordamiento.</li>
+            <li>Siempre simplificado (se divide entre el MCD) y con el signo en el numerador; el denominador siempre es positivo.</li>
+            <li>Es <b>inmutable</b>: cada operación devuelve un número nuevo.</li>
+            <li>Lee enteros, decimales y fracciones: <code>"0.25"</code> → 25/100 → <b>1/4</b>; <code>"1.5/2"</code> → 3/4; <code>"1/0"</code> se rechaza.</li>
+            <li>Viaja en el JSON como <b>texto</b> (<code>"2/3"</code>), nunca como número de punto flotante.</li>
+          </ul>
+          <span class="file">app/Services/GaussJordan/RationalNumber.php</span>
+        </div>
+      </div>
+
+      <div class="topic" data-id="t5">
+        <input type="checkbox" id="t5">
+        <label for="t5">Solución paramétrica e inconsistencia</label>
+        <div class="body">
+          <ul>
+            <li>Cada variable libre recibe un parámetro: <code>t, s, r, q, p</code> en ese orden.</li>
+            <li>Cada variable con pivote = término independiente − (coeficientes de las libres × su parámetro). Ejemplo MAT-03: <code>a = 1 − t, b = 1, c = t</code>.</li>
+            <li>Contradicción: se devuelve la fila, <code>left = "0"</code>, <code>right = k</code> y la ecuación escrita, por ejemplo <code>0a + 0b + 0c = 1</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="topic" data-id="t6">
+        <input type="checkbox" id="t6">
+        <label for="t6">Sistemas rectangulares (m ecuaciones × n incógnitas)</label>
+        <div class="body">
+          <ul>
+            <li>El rango nunca supera min(m, n).</li>
+            <li><b>Subdeterminado</b> (m &lt; n): nunca tiene solución única, porque rango ≤ m &lt; n. Da infinitas o ninguna.</li>
+            <li><b>Sobredeterminado</b> (m &gt; n): puede dar cualquiera de los tres casos.</li>
+            <li>El contrato acepta <code>rows</code> y <code>columns</code> (2 a 5 cada uno) y conserva <code>size</code> para cuadrados.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="topic" data-id="t7">
+        <input type="checkbox" id="t7">
+        <label for="t7">La API: /solve y /health</label>
+        <div class="body">
+          <ul>
+            <li>Flujo: <b>Form Request</b> valida → <b>controlador</b> delgado → <b>servicio</b> calcula → <b>Resource</b> arma el JSON.</li>
+            <li><code>POST /api/gauss-jordan/solve</code> devuelve siempre los mismos campos: <code>classification, solution, free_variables, parameters, contradiction, verification, initial_matrix, steps, rref</code> (más <code>rows, columns, size, variables</code>).</li>
+            <li><code>classification</code> es el discriminador: decide qué campos tienen valor.</li>
+            <li>Errores: <b>422</b> con <code>{error, message, fields}</code> si la entrada es inválida (el solver no se llama); <b>500</b> con mensaje genérico si algo inesperado falla.</li>
+            <li><code>GET /api/health</code> responde estado, versión y límites, para que el frontend sepa que el backend está vivo.</li>
+          </ul>
+          <span class="file">GaussJordanController · SolveSystemResource · routes/api.php · docs/API-SOLVE.md</span>
+        </div>
+      </div>
+
+      <div class="topic" data-id="t8">
+        <input type="checkbox" id="t8">
+        <label for="t8">Los pasos registrados (MatrixOperation)</label>
+        <div class="body">
+          <ul>
+            <li>Cada paso guarda: <code>index, type, notation, description, target_row, source_row, factor, pivot, modified_rows, calculation, before, after</code>.</li>
+            <li>Filas y columnas en base 1 en el JSON. El <code>after</code> de un paso es el <code>before</code> del siguiente (hay una prueba que lo verifica).</li>
+            <li>El frontend solo muestra estos pasos: no recalcula nada. El PDF de Jacob usa el mismo servicio.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="topic" data-id="t9">
+        <input type="checkbox" id="t9">
+        <label for="t9">Pruebas y la unificación del repositorio</label>
+        <div class="body">
+          <ul>
+            <li>Casos del plan: MAT-01 a MAT-06 (única, Figma 3×3, infinitas, inconsistente, pivote cero, fracciones), más 5×5, dos libres, homogéneo, rectangulares, números grandes. En total, 63 pruebas del backend.</li>
+            <li>En la unificación: <code>main</code> había borrado la base de Laravel; se restauró desde <code>develop</code>. Se corrigió un error 500 con matrices rectangulares en la validación. Se fijó PHP 8.3 como plataforma para que instale en todas las máquinas.</li>
+          </ul>
+          <span class="file">tests/Unit/GaussJordan · tests/Feature/Api · docs/UNIFICACION.md</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────── EJEMPLO ─────────────── -->
+  <section id="ejemplo" aria-labelledby="h-ejemplo">
+    <span class="eyebrow">Parte 2</span>
+    <h2 id="h-ejemplo">El ejemplo 3×3 que debes dominar</h2>
+    <p class="lead">Es el caso MAT-02 del plan y el que conviene usar en la demo. Practica hacerlo a mano: son exactamente los 7 pasos que devuelve tu API. La fila resaltada es la que cambió.</p>
+    <pre>a +  b +  c =  6
+2a + 3b +  c = 11
+a + 2b + 3c = 14</pre>
+
+    <div class="steps">
+      <div class="step"><b>Inicio</b>
+        <table class="m"><tr><td>1</td><td>1</td><td>1</td><td class="rhs">6</td></tr><tr><td>2</td><td>3</td><td>1</td><td class="rhs">11</td></tr><tr><td>1</td><td>2</td><td>3</td><td class="rhs">14</td></tr></table></div>
+      <div class="step"><b>1 · F2 → F2 − 2F1</b>
+        <table class="m"><tr><td>1</td><td>1</td><td>1</td><td class="rhs">6</td></tr><tr class="hl"><td>0</td><td>1</td><td>−1</td><td class="rhs">−1</td></tr><tr><td>1</td><td>2</td><td>3</td><td class="rhs">14</td></tr></table></div>
+      <div class="step"><b>2 · F3 → F3 − F1</b>
+        <table class="m"><tr><td>1</td><td>1</td><td>1</td><td class="rhs">6</td></tr><tr><td>0</td><td>1</td><td>−1</td><td class="rhs">−1</td></tr><tr class="hl"><td>0</td><td>1</td><td>2</td><td class="rhs">8</td></tr></table></div>
+      <div class="step"><b>3 · F1 → F1 − F2</b>
+        <table class="m"><tr class="hl"><td>1</td><td>0</td><td>2</td><td class="rhs">7</td></tr><tr><td>0</td><td>1</td><td>−1</td><td class="rhs">−1</td></tr><tr><td>0</td><td>1</td><td>2</td><td class="rhs">8</td></tr></table></div>
+      <div class="step"><b>4 · F3 → F3 − F2</b>
+        <table class="m"><tr><td>1</td><td>0</td><td>2</td><td class="rhs">7</td></tr><tr><td>0</td><td>1</td><td>−1</td><td class="rhs">−1</td></tr><tr class="hl"><td>0</td><td>0</td><td>3</td><td class="rhs">9</td></tr></table></div>
+      <div class="step"><b>5 · F3 → (1/3)F3</b>
+        <table class="m"><tr><td>1</td><td>0</td><td>2</td><td class="rhs">7</td></tr><tr><td>0</td><td>1</td><td>−1</td><td class="rhs">−1</td></tr><tr class="hl"><td>0</td><td>0</td><td>1</td><td class="rhs">3</td></tr></table></div>
+      <div class="step"><b>6 · F1 → F1 − 2F3</b>
+        <table class="m"><tr class="hl"><td>1</td><td>0</td><td>0</td><td class="rhs">1</td></tr><tr><td>0</td><td>1</td><td>−1</td><td class="rhs">−1</td></tr><tr><td>0</td><td>0</td><td>1</td><td class="rhs">3</td></tr></table></div>
+      <div class="step"><b>7 · F2 → F2 + F3</b>
+        <table class="m"><tr><td>1</td><td>0</td><td>0</td><td class="rhs">1</td></tr><tr class="hl"><td>0</td><td>1</td><td>0</td><td class="rhs">2</td></tr><tr><td>0</td><td>0</td><td>1</td><td class="rhs">3</td></tr></table></div>
+    </div>
+    <div class="callout ok"><b>Resultado:</b> a = 1, b = 2, c = 3. Comprobación: 1+2+3 = 6 ✓ · 2+6+3 = 11 ✓ · 1+4+9 = 14 ✓. Rango(A) = rango([A|b]) = 3 = n, por eso es única.</div>
+
+    <div class="classes">
+      <div class="class ok"><h3>Única · MAT-01</h3><p class="mono">2a + b = 5<br>a − b = 1</p><p>a = 2, b = 1</p></div>
+      <div class="class warn"><h3>Infinitas · MAT-03</h3><p class="mono">a + b + c = 2<br>2a + 2b + 2c = 4<br>a − b + c = 0</p><p>c libre: a = 1 − t, b = 1, c = t</p></div>
+      <div class="class bad"><h3>Sin solución · MAT-04</h3><p class="mono">a + b = 3<br>2a + 2b = 6<br>a + b = 4</p><p>Queda una fila 0 = 1</p></div>
+    </div>
+  </section>
+
+  <!-- ─────────────── GUION ─────────────── -->
+  <section id="guion" aria-labelledby="h-guion">
+    <span class="eyebrow">Parte 3</span>
+    <h2 id="h-guion">Guion para tu parte (unos 6 minutos)</h2>
+    <p class="lead">Dilo con tus palabras; no hace falta memorizarlo literal. La línea con borde es lo que dices y debajo está lo que muestras.</p>
+
+    <ol class="script">
+      <li><span class="time">0:00</span>
+        <div class="stack">
+          <p class="say">Soy Diego, el líder técnico. Mi parte es el núcleo matemático: el algoritmo de Gauss-Jordan, los números exactos, cómo se clasifica el sistema y la API que resuelve, <code>/solve</code> y <code>/health</code>. Todo el cálculo vive en un solo lugar del backend; el frontend y el PDF solo muestran lo que mi servicio devuelve.</p>
+          <p class="do">el diagrama de arquitectura del plan (React → Laravel API → GaussJordanService).</p>
+        </div></li>
+      <li><span class="time">0:45</span>
+        <div class="stack">
+          <p class="say">El primer problema era la precisión. Si usáramos decimales de computadora, 1/3 se guarda como 0.3333… y los errores se acumulan; además, un 0.0000001 podría parecer un pivote. Por eso creé <code>RationalNumber</code>: cada número es una fracción con enteros sin límite de tamaño, siempre simplificada. Nunca redondeamos, y la respuesta viaja como texto, por ejemplo "2/3".</p>
+          <p class="do">el archivo RationalNumber.php, los métodos plus, multipliedBy y normalized.</p>
+        </div></li>
+      <li><span class="time">1:45</span>
+        <div class="stack">
+          <p class="say">El algoritmo recorre las columnas de izquierda a derecha. En cada una busca un valor distinto de cero para usarlo como pivote; si está más abajo, intercambia filas. Si el pivote no es 1, multiplica la fila por su recíproco. Después hace cero todo lo demás en esa columna, arriba y abajo. Si una columna no tiene pivote, esa incógnita queda libre.</p>
+          <p class="do">la app con el ejemplo 3×3 de Figma, en la pantalla Procedimiento, avanzando paso a paso.</p>
+        </div></li>
+      <li><span class="time">2:45</span>
+        <div class="stack">
+          <p class="say">Cada operación se guarda con la matriz antes, la matriz después, la fila que cambió, el pivote y el cálculo término a término. Por eso la pantalla puede explicar cada paso sin hacer cuentas: aquí, por ejemplo, F2 pasa a F2 menos 2F1 para hacer cero debajo del primer pivote.</p>
+          <p class="do">el paso 1 con la fila resaltada y el bloque «Cálculo de la fila modificada».</p>
+        </div></li>
+      <li><span class="time">3:30</span>
+        <div class="stack">
+          <p class="say">Para clasificar uso los rangos. Si el rango de A es igual al de la matriz aumentada e igual al número de incógnitas, hay solución única. Si son iguales pero menores, hay variables libres e infinitas soluciones. Si la aumentada tiene mayor rango, aparece una fila 0 igual a un número distinto de cero y el sistema no tiene solución.</p>
+          <p class="do">el Resultado del 3×3 (única), luego cargar MAT-03 (infinitas) y MAT-04 (sin solución).</p>
+        </div></li>
+      <li><span class="time">4:30</span>
+        <div class="stack">
+          <p class="say">La API tiene un contrato fijo: la respuesta siempre trae los mismos campos y <code>classification</code> decide cuáles tienen valor. Antes de resolver, un Form Request valida la entrada; si hay un error, responde 422 indicando la celda exacta y el solver ni se ejecuta. <code>/health</code> sirve para comprobar que el backend está disponible. También soporta sistemas rectangulares, de 2 a 5 ecuaciones y de 2 a 5 incógnitas.</p>
+          <p class="do">dejar una celda vacía y pulsar Resolver para mostrar el error marcado; opcional, /api/health en el navegador.</p>
+        </div></li>
+      <li><span class="time">5:20</span>
+        <div class="stack">
+          <p class="say">Para asegurar que funciona escribí pruebas automáticas con los casos del plan, de MAT-01 a MAT-06, más 5×5, rectangulares y números grandes: 63 pruebas del backend en verde. Como líder técnico también unifiqué las ramas del equipo en una sola aplicación que se instala con un comando. Con esto termino mi parte; le paso a Jacob, que explicará la validación y el PDF.</p>
+          <p class="do">la terminal con <code>npm test</code> terminado en verde (puede ser una captura de respaldo).</p>
+        </div></li>
+    </ol>
+    <div class="callout warn"><b>Plan B:</b> lleva capturas de cada pantalla por si falla la red o la computadora. Antes de entrar, abre la app con <code>npm start</code> y deja cargado el ejemplo 3×3.</div>
+  </section>
+
+  <!-- ─────────────── PREGUNTAS ─────────────── -->
+  <section id="preguntas" aria-labelledby="h-preguntas">
+    <span class="eyebrow">Parte 4</span>
+    <h2 id="h-preguntas">Preguntas que te pueden hacer</h2>
+    <p class="lead">Intenta responder en voz alta antes de abrir cada una. Marca «Ya me la sé» para ocultarla de la práctica al azar.</p>
+
+    <div class="qbar" role="toolbar" aria-label="Filtrar preguntas">
+      <button class="filter" type="button" data-f="all" aria-pressed="true">Todas</button>
+      <button class="filter" type="button" data-f="mat" aria-pressed="false">Matemáticas</button>
+      <button class="filter" type="button" data-f="num" aria-pressed="false">Números exactos</button>
+      <button class="filter" type="button" data-f="cod" aria-pressed="false">Código</button>
+      <button class="filter" type="button" data-f="api" aria-pressed="false">API</button>
+      <button class="filter" type="button" data-f="lid" aria-pressed="false">Líder técnico</button>
+      <button class="btn" type="button" id="random">Pregunta al azar</button>
+      <button class="btn ghost" type="button" id="pending">Solo pendientes</button>
+      <span class="progress" id="progress" aria-live="polite"></span>
+    </div>
+
+    <div class="qlist" id="qlist"></div>
+  </section>
+
+  <footer>Basado en el código real del repositorio (GaussJordanService, RationalNumber, MatrixOperation, SystemClassification, GaussJordanController) y en el plan del proyecto. Los avances que marques se guardan solo en este navegador.</footer>
+</div>
+
+<script>
+const Q = [
+  // ── Matemáticas
+  ['mat','b','¿Qué es el método de Gauss-Jordan?','Es un método para resolver sistemas lineales aplicando operaciones elementales a la matriz aumentada [A|b] hasta llegar a la forma escalonada reducida: cada pivote vale 1 y es el único valor distinto de cero en su columna. En esa forma la solución se lee directamente.','Menciona la matriz aumentada y la forma escalonada reducida.'],
+  ['mat','b','¿Cuáles son las operaciones elementales y por qué no cambian la solución?','Intercambiar dos filas, multiplicar una fila por un número distinto de cero y sumarle a una fila un múltiplo de otra. No cambian la solución porque cada una se puede deshacer con otra operación del mismo tipo: el sistema nuevo es equivalente al original.','Si te piden más: cada operación equivale a multiplicar por una matriz elemental, que es invertible.'],
+  ['mat','b','¿Qué diferencia hay entre Gauss y Gauss-Jordan?','Gauss solo hace ceros debajo de los pivotes (forma escalonada) y luego resuelve con sustitución hacia atrás. Gauss-Jordan también hace ceros arriba de cada pivote y deja los pivotes en 1, así que no hace falta sustituir.',''],
+  ['mat','b','¿Qué es un pivote?','Es el primer valor distinto de cero que se usa en una columna para hacer ceros en el resto de esa columna. En la forma reducida, cada pivote vale 1.',''],
+  ['mat','m','¿Qué es el rango y cómo lo obtiene tu programa?','El rango es el número de filas linealmente independientes, que coincide con el número de pivotes al terminar la eliminación. Mi código cuenta los pivotes que encuentra: la variable pivotRow al final es el rango de A.',''],
+  ['mat','m','¿Cómo decides si el sistema tiene solución única, infinitas o ninguna?','Con el teorema de Rouché–Frobenius. Si rango(A) = rango([A|b]) = n, hay solución única. Si los rangos son iguales pero menores que n, hay infinitas soluciones con n − rango variables libres. Si rango(A) < rango([A|b]), no hay solución.','Ten listo un ejemplo de cada caso: MAT-01, MAT-03 y MAT-04.'],
+  ['mat','m','¿Qué significa una fila 0 = 1 en la forma reducida?','Que una ecuación dice 0·a + 0·b + 0·c = 1, lo cual es imposible para cualquier valor. El sistema es inconsistente: no tiene solución. Mi API devuelve esa fila en el campo contradiction.',''],
+  ['mat','m','¿Y una fila 0 = 0?','Es una ecuación que siempre se cumple: no aporta información. Suele aparecer cuando una ecuación es combinación de otras, como en MAT-03, donde la segunda ecuación es el doble de la primera.',''],
+  ['mat','m','¿Qué es una variable libre y cómo se escribe la solución paramétrica?','Es una incógnita cuya columna no tiene pivote; puede tomar cualquier valor real. Se le asigna un parámetro (t, luego s, r…) y cada variable con pivote se despeja en función de esos parámetros. En MAT-03: a = 1 − t, b = 1, c = t.','Número de variables libres = número de incógnitas − rango.'],
+  ['mat','d','Si hay más incógnitas que ecuaciones, ¿puede haber solución única?','No. El rango no puede ser mayor que el número de filas; si hay menos ecuaciones que incógnitas, el rango es menor que n y siempre queda al menos una variable libre. El sistema tiene infinitas soluciones o ninguna.','Ejemplo de la app: 2 ecuaciones y 3 incógnitas da a = 7 − 2t, b = −1 + t, c = t.'],
+  ['mat','d','¿Y con más ecuaciones que incógnitas?','Puede pasar cualquiera de los tres casos. Si las ecuaciones de sobra son combinaciones de las otras, puede tener solución única; si contradicen a las demás, aparece una fila 0 = k y no tiene solución.','Ejemplos: unique-3x2 e inconsistent-3x2.'],
+  ['mat','d','¿Un sistema homogéneo (todos los términos independientes en 0) puede no tener solución?','No. Siempre tiene al menos la solución trivial, todo en cero, porque nunca puede aparecer una fila 0 = k con k ≠ 0. Puede tener solución única (solo la trivial) o infinitas. Hay una prueba para ese caso.',''],
+  ['mat','d','¿Por qué en la clasificación no basta con mirar si hay una fila de ceros?','Porque hay que distinguir dónde está el cero. Una fila 0 = 0 indica dependencia y una fila 0 = k indica contradicción. Además, en sistemas rectangulares puede haber variables libres sin filas de ceros, por ejemplo con 2 ecuaciones y 3 incógnitas. Por eso comparo el rango con el número de columnas.',''],
+
+  // ── Números exactos
+  ['num','b','¿Por qué no usaron números decimales normales (float)?','Porque los decimales de punto flotante se redondean: 0.1 + 0.2 da 0.30000000000000004 y 1/3 nunca es exacto. En Gauss-Jordan esos errores se acumulan y un número casi cero podría tomarse como pivote. Con fracciones exactas el resultado es exacto, por ejemplo 2/3 en MAT-06.',''],
+  ['num','m','¿Cómo funciona RationalNumber por dentro?','Guarda un numerador y un denominador como enteros de precisión arbitraria (BigInteger de brick/math). Después de cada operación se normaliza: se divide entre el máximo común divisor y el signo pasa al numerador, así el denominador siempre es positivo. Es inmutable: cada operación devuelve un número nuevo.',''],
+  ['num','m','¿Cómo suma dos fracciones tu código?','Con la fórmula a/b + c/d = (a·d + c·b) / (b·d) y luego simplifica. Restar es sumar el opuesto, multiplicar es numerador por numerador y denominador por denominador, y dividir es multiplicar por el recíproco.',''],
+  ['num','m','¿Cómo convierte "0.25" o "1.5/2" en fracción?','Para un decimal quita el punto y divide entre una potencia de 10: 0.25 → 25/100 → 1/4. Para una fracción convierte cada parte y las divide: 1.5/2 → (3/2)/2 = 3/4. Si el denominador es 0 lanza un error, y la validación responde 422.',''],
+  ['num','m','¿Por qué los valores viajan como texto en el JSON y no como números?','Porque en JavaScript los números son decimales de punto flotante; "2/3" no se puede representar exactamente y un entero muy grande perdería precisión. Mandarlo como texto conserva el valor exacto hasta que la pantalla lo dibuja.',''],
+  ['num','d','¿Qué pasa con números muy grandes? ¿Puede desbordarse?','No. BigInteger no tiene límite de tamaño, así que el numerador y el denominador pueden crecer lo que haga falta. Hay una prueba, test_numeros_grandes_no_desbordan, que lo verifica.',''],
+  ['num','d','¿Por qué siempre simplificar las fracciones?','Por tres razones: los números no crecen sin necesidad durante la eliminación; dos fracciones iguales tienen la misma representación, así que comparar es directo (equals compara numerador y denominador), y el usuario ve 1/2 en lugar de 3/6.',''],
+
+  // ── Código
+  ['cod','b','¿Dónde está el algoritmo y quién más lo usa?','En backend/app/Services/GaussJordan/GaussJordanService.php. Es la única fuente de verdad: lo usan el endpoint /solve y el PDF de Jacob (/steps.pdf). El frontend no tiene fórmulas de eliminación; solo muestra la respuesta.',''],
+  ['cod','m','¿Cómo eliges el pivote? ¿Por qué no el valor más grande?','Tomo el primer valor distinto de cero desde la fila pivote hacia abajo. Elegir el mayor en valor absoluto (pivoteo parcial) sirve para reducir errores de redondeo con decimales; como mi aritmética es exacta no hay redondeo, y el primero distinto de cero da pasos más fáciles de seguir para el estudiante.','Esta pregunta demuestra que entiendes por qué existe el pivoteo parcial.'],
+  ['cod','m','¿Qué hace el código cuando el pivote es cero (MAT-05)?','Busca más abajo una fila con valor distinto de cero en esa columna y las intercambia. En MAT-05 (b = 2, a + b = 3) el primer pivote es 0, así que hace F1 ↔ F2 y continúa. Si toda la columna es cero, esa variable es libre.',''],
+  ['cod','m','¿Qué guarda cada paso y para qué?','Cada MatrixOperation guarda el número de paso, el tipo (swap, scale, eliminate), la notación como F2 → F2 − 2F1, una descripción, las filas involucradas, el factor, el pivote, las filas modificadas, el cálculo término a término y las matrices antes y después. Así la pantalla y el PDF explican cada paso sin calcular nada.',''],
+  ['cod','m','¿Cómo calculas la verificación?','Tomo la solución y la sustituyo en cada ecuación de la matriz original: sumo coeficiente × valor y lo comparo con el término independiente. Devuelvo left, right y ok por ecuación. Solo se calcula cuando la solución es única.',''],
+  ['cod','d','¿Para qué sirve moveContradictionsBeforeZeroRows?','Después de la eliminación, las filas sin pivote quedan al final. Esa función coloca primero las filas contradictorias (0 = k) y después las filas 0 = 0. Así la contradicción queda siempre justo después del último pivote, que es donde la busca la clasificación, y se ve mejor en la forma reducida.',''],
+  ['cod','d','¿Cuántas operaciones hace el algoritmo en el peor caso?','Del orden de n³ para una matriz de n × n: por cada una de las n columnas, se eliminan hasta n filas y cada eliminación recorre n + 1 valores. Para 5×5 son pocas operaciones; en el ejemplo 5×5 de la app salen 21 pasos registrados.',''],
+  ['cod','m','¿Cómo probaste que el algoritmo es correcto?','Con pruebas automáticas en PHPUnit: MAT-01 a MAT-06 del plan, 5×5 con fracciones, dos variables libres, sistema homogéneo, rectangulares, números grandes y división entre cero. También una prueba que verifica que el after de cada paso coincide con el before del siguiente. Son 63 pruebas del backend.',''],
+  ['cod','d','¿Qué es "inmutable" y por qué RationalNumber lo es?','Que un objeto no cambia después de crearse; las operaciones devuelven un objeto nuevo. Así puedo guardar la matriz antes de un paso y estar seguro de que no se modifica cuando calculo la matriz después.',''],
+
+  // ── API
+  ['api','b','¿Qué hace /api/gauss-jordan/solve?','Recibe rows, columns y la matriz aumentada como texto, la valida, la resuelve con el servicio y devuelve un JSON con la clasificación, la solución o la parametrización o la contradicción, la verificación, la matriz inicial, todos los pasos y la forma reducida.',''],
+  ['api','b','¿Para qué sirve /api/health?','Para comprobar que el backend está encendido y responde. Devuelve status ok, el nombre del servicio, la versión, los límites de tamaño y la hora. Sirve para la integración y para diagnosticar problemas en la demo.',''],
+  ['api','m','¿Qué pasa si el usuario deja una celda vacía o escribe texto?','El Form Request SolveSystemRequest lo detecta antes de llamar al solver y responde 422 con error invalid_matrix, un mensaje y los errores por campo, por ejemplo matrix.0.0 → "Falta el coeficiente de a en la ecuación 1". El frontend usa esa clave para marcar la celda exacta.','Esta validación es de Jacob; tú explicas que el solver nunca recibe datos inválidos.'],
+  ['api','m','¿Por qué el controlador es "delgado"?','Porque solo coordina: valida con el Form Request, llama al servicio y devuelve el Resource. No tiene matemáticas. Así el algoritmo se puede probar solo y reutilizar en el PDF sin duplicar código.',''],
+  ['api','m','¿Por qué la respuesta siempre tiene todos los campos?','Para que el contrato sea predecible: el frontend no tiene que adivinar qué llega. classification decide qué campos tienen valor; los demás van vacíos (null, [] o {}). Si falta un campo, el frontend lo trata como error de contrato.',''],
+  ['api','d','¿Por qué parameters se manda como objeto vacío {} y no como lista []?','En PHP un arreglo vacío se convierte en [] en JSON, que es una lista. El contrato dice que parameters es un objeto, así que en el Resource lo convierto con (object). Hay una prueba específica: test_parameters_es_objeto_vacio_y_no_lista.',''],
+  ['api','m','¿Por qué no hay base de datos?','Porque el MVP no guarda sistemas ni usuarios: la API es stateless, cada petición se resuelve y se responde. Si el catedrático pidiera historial o cuentas, se agregaría una base de datos y Sanctum para autenticación.',''],
+  ['api','d','¿Qué diferencia hay entre un 422 y un 500?','422 significa que la petición tiene datos inválidos y el usuario puede corregirlos; el mensaje dice qué está mal. 500 es un error inesperado del servidor; se devuelve un mensaje genérico y el detalle queda en el log para revisarlo.',''],
+  ['api','m','¿Cómo soporta sistemas rectangulares sin romper lo anterior?','El contrato nuevo usa rows y columns (2 a 5 cada uno). El contrato antiguo con size sigue funcionando para sistemas cuadrados. Si llegan los tres, deben coincidir. La respuesta incluye rows y columns, y size solo tiene valor cuando el sistema es cuadrado.',''],
+
+  // ── Líder técnico
+  ['lid','b','¿Cuál fue tu rol como Tech Lead?','Crear la base del proyecto y las reglas de ramas, definir el contrato JSON con Jacob, implementar el algoritmo y la API de resolución, revisar los aportes del equipo y, al final, unificar todas las ramas en una sola aplicación funcional.',''],
+  ['lid','m','¿Qué problemas encontraste al unir las ramas?','La rama main había borrado por error la base de Laravel y no arrancaba; la restauré desde develop. Las pantallas de Anderson estaban en un zip borrado del historial y las rescaté. Había un error 500 en la validación con matrices rectangulares, que corregí con pruebas nuevas. Y las dependencias exigían PHP 8.4, así que fijé PHP 8.3 para que instale en todas las computadoras.','Está documentado en docs/UNIFICACION.md.'],
+  ['lid','m','¿Cómo organizaron Git?','main para la entrega, develop para integrar y ramas feature/<nombre>-<modulo> para el trabajo de cada uno, con commits descriptivos. La regla era entrar por Pull Request; la unificación final se subió directo a main por decisión del equipo.','Sé honesto si te preguntan por el push directo.'],
+  ['lid','m','¿Cómo se ejecuta el proyecto?','npm run setup la primera vez (instala backend y frontend y compila la web), luego npm start y se abre http://127.0.0.1:8000. Laravel sirve la página y la API desde el mismo servidor. npm test corre todas las pruebas.',''],
+  ['lid','d','Si quisieran llevar esto a 10×10, ¿qué cambiarías?','En el backend, solo las constantes MAX_ROWS y MAX_COLUMNS y más nombres de variables y parámetros; el algoritmo ya es general. El problema real es la presentación: con 10×10 habría decenas de pasos y matrices difíciles de leer en pantalla, por eso el límite es 5.',''],
+];
+
+const TAG = { mat: 'Matemáticas', num: 'Números exactos', cod: 'Código', api: 'API', lid: 'Líder técnico' };
+const LVL = { b: ['b', 'Básica'], m: ['m', 'Media'], d: ['d', 'Difícil'] };
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+const known = new Set(store.get('gj-diego-known') || []);
+const topicsDone = new Set(store.get('gj-diego-topics') || []);
+let filter = 'all';
+let onlyPending = false;
+
+const list = document.getElementById('qlist');
+Q.forEach(([tag, lvl, q, a, tip], i) => {
+  const d = document.createElement('details');
+  d.className = 'q';
+  d.id = `q${i}`;
+  d.dataset.tag = tag;
+  d.innerHTML = `
+    <summary>
+      <span class="qtext"></span>
+      <span class="lvl ${LVL[lvl][0]}">${LVL[lvl][1]}</span>
+      <span class="qtag">${TAG[tag]} · ${i + 1}</span>
+    </summary>
+    <div class="answer">
+      <p class="a"></p>
+      ${tip ? '<p class="tip"><b>Consejo:</b> <span></span></p>' : ''}
+      <label class="know"><input type="checkbox" id="k${i}"> Ya me la sé</label>
+    </div>`;
+  d.querySelector('.qtext').textContent = q;
+  d.querySelector('.a').textContent = a;
+  if (tip) d.querySelector('.tip span').textContent = tip;
+  const box = d.querySelector('input');
+  box.checked = known.has(i);
+  d.classList.toggle('known', box.checked);
+  box.addEventListener('change', () => {
+    box.checked ? known.add(i) : known.delete(i);
+    d.classList.toggle('known', box.checked);
+    store.set('gj-diego-known', [...known]);
+    render();
+  });
+  list.appendChild(d);
+});
+
+function render() {
+  let shown = 0;
+  list.querySelectorAll('details.q').forEach((d, i) => {
+    const visible = (filter === 'all' || d.dataset.tag === filter) && (!onlyPending || !known.has(i));
+    d.hidden = !visible;
+    if (visible) shown++;
+  });
+  document.getElementById('progress').textContent = `${known.size}/${Q.length} sabidas · ${shown} visibles`;
+}
+
+document.querySelectorAll('.filter').forEach((b) =>
+  b.addEventListener('click', () => {
+    filter = b.dataset.f;
+    document.querySelectorAll('.filter').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    render();
+  }),
+);
+
+const pendingBtn = document.getElementById('pending');
+pendingBtn.addEventListener('click', () => {
+  onlyPending = !onlyPending;
+  pendingBtn.textContent = onlyPending ? 'Mostrar todas' : 'Solo pendientes';
+  render();
+});
+
+document.getElementById('random').addEventListener('click', () => {
+  const pool = [...list.querySelectorAll('details.q')].filter((d, i) => !d.hidden && !known.has(i));
+  const from = pool.length ? pool : [...list.querySelectorAll('details.q')].filter((d) => !d.hidden);
+  if (!from.length) return;
+  list.querySelectorAll('details.q[open]').forEach((d) => (d.open = false));
+  const pick = from[Math.floor(Math.random() * from.length)];
+  pick.scrollIntoView({ block: 'center' });
+  pick.querySelector('summary').focus({ preventScroll: true });
+});
+
+document.querySelectorAll('.topic').forEach((t) => {
+  const box = t.querySelector('input');
+  box.checked = topicsDone.has(t.dataset.id);
+  t.classList.toggle('done', box.checked);
+  box.addEventListener('change', () => {
+    box.checked ? topicsDone.add(t.dataset.id) : topicsDone.delete(t.dataset.id);
+    t.classList.toggle('done', box.checked);
+    store.set('gj-diego-topics', [...topicsDone]);
+  });
+});
+
+render();
+</script>
+</body>
+</html>

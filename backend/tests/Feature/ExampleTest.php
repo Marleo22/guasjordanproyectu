@@ -18,4 +18,14 @@ class ExampleTest extends TestCase
     {
         $this->getJson('/api/no-existe')->assertNotFound();
     }
+
+    public function test_the_web_works_without_an_app_key(): void
+    {
+        // Simula una PC donde todavía no existe backend/.env.
+        config(['app.key' => '']);
+
+        $status = $this->get('/')->getStatusCode();
+        $this->assertContains($status, [200, 503], 'Sin APP_KEY la web no debe responder 500.');
+        $this->getJson('/api/health')->assertOk();
+    }
 }

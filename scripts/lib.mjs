@@ -1,6 +1,6 @@
 // Utilidades compartidas por los scripts de la raíz (Windows, macOS y Linux).
 import { spawn, spawnSync } from 'node:child_process'
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -86,9 +86,17 @@ export function launch(name, paint, cmd, args, opts = {}) {
   return child
 }
 
-export function ensureBackendReady() {
-  if (!existsSync(path.join(BACKEND, 'vendor', 'autoload.php')) || !existsSync(path.join(BACKEND, '.env'))) {
-    fail('El backend no está instalado. Ejecuta primero: npm run setup')
+/** Comprueba el backend; si solo falta backend/.env (no se sube a Git), lo crea con su APP_KEY. */
+export function ensureBackendReady({ needFrontend = true } = {}) {
+  if (!existsSync(path.join(BACKEND, 'vendor', 'autoload.php'))) {
+    fail('Faltan las dependencias del backend. Ejecuta primero: npm run setup')
   }
-  if (!existsSync(path.join(FRONTEND, 'node_modules'))) fail('El frontend no está instalado. Ejecuta primero: npm run setup')
+  if (!existsSync(path.join(BACKEND, '.env'))) {
+    log('Creando backend/.env y su APP_KEY…')
+    copyFileSync(path.join(BACKEND, '.env.example'), path.join(BACKEND, '.env'))
+    run('php', ['artisan', 'key:generate', '--ansi'], { cwd: BACKEND })
+  }
+  if (needFrontend && !existsSync(path.join(FRONTEND, 'node_modules'))) {
+    fail('Faltan las dependencias del frontend. Ejecuta primero: npm run setup')
+  }
 }

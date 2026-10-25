@@ -55,6 +55,18 @@ Navegador ── /, /datos, /procedimiento, /resultado ──▶ Laravel devuelv
 - En desarrollo, Vite redirige `/api` a `http://127.0.0.1:8000` (configurable con `BACKEND_URL` en `frontend/.env.local`).
 - **Modo sin servidor**: `VITE_USE_MOCK=true` usa respuestas guardadas (solo los ejemplos de «Cargar ejemplo»), útil para presentar sin PHP: `npm --prefix frontend run build:mock`.
 
+## Si no arranca en otra PC
+
+| Síntoma | Causa | Solución |
+| ------- | ----- | -------- |
+| `vendor/autoload.php` no existe / `composer` no se reconoce | Faltan las dependencias de PHP | `npm run setup` (descarga Composer si hace falta) |
+| Página de error de Laravel 13 / "No application encryption key" | Falta `backend/.env` (no se sube a Git) | `npm start` lo crea solo; manualmente: `copy .env.example .env` y `php artisan key:generate` dentro de `backend/` |
+| "Falta compilar la web" | No existe `backend/public/spa` | `npm run build` |
+| Error de versión de PHP | PHP menor a 8.3 | Instala PHP 8.3 o superior |
+| "The zip extension and unzip/7z commands are both missing" | Composer necesita `zip` | `npm run setup` la activa solo para Composer; o descomenta `extension=zip` en `php.ini` |
+
+La web compilada (`backend/public/spa`) viene incluida en el repositorio, así que con solo `composer install` y `php artisan serve` dentro de `backend/` la aplicación ya funciona. Si cambias algo del frontend, ejecuta `npm run build` antes de hacer commit.
+
 ## API
 
 | Método | Ruta | Responsable | Función |
