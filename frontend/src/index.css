@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/geist";
+
+/* Tokens de marca (prototipo de Yorman) expuestos a Tailwind/shadcn. */
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: "Geist Variable", Inter, "Segoe UI", system-ui, sans-serif;
+  --font-mono: Consolas, "Cascadia Mono", ui-monospace, monospace;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  color-scheme: light;
+  --background: #f5f7fb;
+  --foreground: #172033;
+  --card: #ffffff;
+  --card-foreground: #172033;
+  --primary: #5b4cf0;
+  --primary-foreground: #ffffff;
+  --secondary: #eeecff;
+  --secondary-foreground: #4938d4;
+  --muted: #eef1f6;
+  --muted-foreground: #5f6b80;
+  --accent: #eeecff;
+  --accent-foreground: #4938d4;
+  --destructive: #b42318;
+  --destructive-soft: #fff1f1;
+  --success: #0f7a4a;
+  --success-soft: #e8f8f0;
+  --warning: #9a5b00;
+  --warning-soft: #fff4d6;
+  --border: #dfe4ec;
+  --input: #c9d1de;
+  --ring: #5b4cf0;
+  --radius: 0.625rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}

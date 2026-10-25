@@ -136,13 +136,21 @@ class SolveSystemRequest extends FormRequest
             'matrix.*.*.required' => 'Falta un valor en la matriz aumentada.',
         ];
 
+        $columns = $this->resolvedColumns();
+        $columns = $columns !== null && $columns >= GaussJordanService::MIN_COLUMNS && $columns <= GaussJordanService::MAX_COLUMNS
+            ? $columns
+            : GaussJordanService::MAX_COLUMNS;
+
+        // Laravel usa el primer mensaje cuyo patrón coincide, así que los mensajes
+        // específicos por celda deben ir ANTES que el comodín matrix.*.*.required.
+        $specific = [];
         for ($row = 0; $row < GaussJordanService::MAX_ROWS; $row++) {
-            for ($column = 0; $column <= GaussJordanService::MAX_COLUMNS; $column++) {
-                $messages["matrix.{$row}.{$column}.required"] = $this->missingValueMessage($row, $column, $this->resolvedColumns() ?? GaussJordanService::MAX_COLUMNS);
+            for ($column = 0; $column <= $columns; $column++) {
+                $specific["matrix.{$row}.{$column}.required"] = $this->missingValueMessage($row, $column, $columns);
             }
         }
 
-        return $messages;
+        return $specific + $messages;
     }
 
     protected function failedValidation(Validator $validator): void
@@ -201,8 +209,8 @@ class SolveSystemRequest extends FormRequest
         }
 
         return sprintf(
-            'El valor de %s en la ecuación %d debe ser un entero, decimal o fracción válida.',
-            $this->columnLabel((int) $matches[2], $this->resolvedColumns() ?? GaussJordanService::MAX_COLUMNS),
+            '%s en la ecuación %d debe ser un entero, decimal o fracción válida (por ejemplo: 3, -0.5, 1/3).',
+            ucfirst($this->columnLabel((int) $matches[2], $this->resolvedColumns() ?? GaussJordanService::MAX_COLUMNS)),
             (int) $matches[1] + 1,
         );
     }
@@ -221,6 +229,10 @@ class SolveSystemRequest extends FormRequest
     {
         if ($column === $columns) {
             return 'el término independiente';
+        }
+
+        if ($column > $columns || ! isset(GaussJordanService::VARIABLES[$column])) {
+            return sprintf('el valor %d', $column + 1);
         }
 
         return 'el coeficiente de '.GaussJordanService::VARIABLES[$column];

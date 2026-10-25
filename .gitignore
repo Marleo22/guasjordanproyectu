@@ -1,0 +1,4 @@
+node_modules/
+/tools/composer.phar
+.DS_Store
+Thumbs.db
