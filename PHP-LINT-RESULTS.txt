@@ -1,0 +1,11 @@
+No syntax errors detected in backend/app/Http/Controllers/Api/GaussJordanController.php
+No syntax errors detected in backend/app/Http/Controllers/Api/GaussJordanSupportController.php
+No syntax errors detected in backend/app/Http/Requests/SolveSystemRequest.php
+No syntax errors detected in backend/app/Http/Resources/SolveSystemResource.php
+No syntax errors detected in backend/app/Services/GaussJordan/GaussJordanService.php
+No syntax errors detected in backend/resources/views/pdf/gauss-jordan-steps.blade.php
+No syntax errors detected in backend/resources/views/pdf/partials/matrix.blade.php
+No syntax errors detected in backend/routes/api.php
+No syntax errors detected in backend/tests/Feature/Api/GaussJordanSupportEndpointTest.php
+No syntax errors detected in backend/tests/Feature/Api/SolveEndpointTest.php
+No syntax errors detected in backend/tests/Unit/GaussJordan/RectangularGaussJordanServiceTest.php
