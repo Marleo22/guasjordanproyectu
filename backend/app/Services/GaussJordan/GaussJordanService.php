@@ -264,11 +264,15 @@ final class GaussJordanService
     {
         $variables = array_slice(self::VARIABLES, 0, $columns);
         $rowOfPivot = array_flip($pivotColumns);
+        $inconsistent = $rank < $rows && ! $rref[$rank][$columns]->isZero();
         $result = [
             'size' => $rows === $columns ? $rows : null,
             'rows' => $rows,
             'columns' => $columns,
             'variables' => $variables,
+            // rango(A) = número de pivotes; rango([A|b]) suma 1 si aparece una fila 0 = k.
+            'rank' => $rank,
+            'augmented_rank' => $inconsistent ? $rank + 1 : $rank,
             'classification' => null,
             'solution' => null,
             'free_variables' => [],
@@ -280,7 +284,7 @@ final class GaussJordanService
             'rref' => MatrixOperation::matrixToStrings($rref),
         ];
 
-        if ($rank < $rows && ! $rref[$rank][$columns]->isZero()) {
+        if ($inconsistent) {
             $result['classification'] = SystemClassification::Inconsistent->value;
             $result['contradiction'] = [
                 'row' => $rank + 1,

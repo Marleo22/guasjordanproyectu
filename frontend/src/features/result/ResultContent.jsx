@@ -1,4 +1,5 @@
 import { FractionText } from '@/components/matrix/FractionText'
+import { DimensionSummary, shapeExplanation } from '@/components/matrix/DimensionSummary'
 import { MatrixView } from '@/components/matrix/MatrixView'
 import { CLASSIFICATION_COPY, equationText, prettyMinus, variablesFor } from '@/lib/formatters'
 
@@ -35,6 +36,18 @@ export function ResultContent({ result }) {
         </div>
       </section>
 
+      <div className="flex flex-col gap-2">
+        <DimensionSummary
+          rows={result.rows}
+          columns={columns}
+          rank={result.rank}
+          augmentedRank={result.augmented_rank}
+        />
+        {shapeExplanation(result.rows, columns) && (
+          <p className="m-0 max-w-3xl text-sm text-muted-foreground">{shapeExplanation(result.rows, columns)}</p>
+        )}
+      </div>
+
       {result.classification === 'unique' && <UniqueSolution solution={result.solution} variables={variables} />}
       {result.classification === 'infinite' && (
         <InfiniteSolution parameters={result.parameters} freeVariables={result.free_variables} variables={variables} />
@@ -48,6 +61,8 @@ export function ResultContent({ result }) {
             matrix={result.rref}
             columns={columns}
             showRowLabels
+            showHeader
+            variables={variables}
             dangerRows={result.contradiction ? [result.contradiction.row] : []}
             label="Forma escalonada reducida"
           />

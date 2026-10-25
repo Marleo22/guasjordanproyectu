@@ -30,3 +30,16 @@ Rama `unificado`, creada a partir de `main` y fusionando `origin/develop` y `ori
 - Backend: 60 pruebas PHPUnit en verde (incluye generación real del PDF con Dompdf).
 - Frontend: 27 pruebas `node --test` (estado, cliente API, modo sin servidor) en verde.
 - Recorrido manual: 3×3 solución única, 2×3 infinitas soluciones (rectangular), escritorio y móvil.
+
+## Feedback de QA: sistemas rectangulares
+
+Reporte: "al elegir 3x2 o 5x3 parece que calcula una matriz cuadrada". El cálculo ya respetaba filas ≠ columnas
+(se agregó `RectangularDimensionsTest` para fijarlo), pero la pantalla se prestaba a confusión: la matriz
+aumentada [A|b] agrega una columna, así que un 3×2 se ve como un cuadro de 3×3, y la solución da un valor por
+incógnita (columna), no por fila. Cambios:
+
+- La API devuelve `rank` y `augmented_rank`.
+- Datos, Procedimiento y Resultado muestran ecuaciones (filas), incógnitas (columnas), A, [A|b] y rangos.
+- Las matrices tienen encabezados `a b c | =` y etiquetas F1, F2…
+- Texto que explica sistemas sobredeterminados y subdeterminados; vista previa de la forma en Tamaño.
+- Ejemplos rectangulares nuevos: 2×4, 3×4, 3×5, 4×2, 4×3, 5×2 y 5×3.

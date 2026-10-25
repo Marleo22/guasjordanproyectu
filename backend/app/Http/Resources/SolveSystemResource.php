@@ -25,6 +25,8 @@ class SolveSystemResource extends JsonResource
             'rows' => $r['rows'],
             'columns' => $r['columns'],
             'variables' => $r['variables'],
+            'rank' => $r['rank'],
+            'augmented_rank' => $r['augmented_rank'],
             'classification' => $r['classification'],
             'solution' => $r['solution'],
             'free_variables' => $r['free_variables'],

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { DimensionSummary } from '@/components/matrix/DimensionSummary'
 import { MatrixView } from '@/components/matrix/MatrixView'
 import Badge from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -47,6 +48,7 @@ export default function ProcedurePage() {
           Sistema {dimensionLabel(result.rows ?? state.rows, columns)} · {total}{' '}
           {total === 1 ? 'operación elemental' : 'operaciones elementales'} hasta la forma escalonada reducida.
         </p>
+        <DimensionSummary rows={result.rows ?? state.rows} columns={columns} />
       </header>
 
       {total === 0 ? (

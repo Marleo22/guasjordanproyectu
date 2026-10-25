@@ -12,6 +12,7 @@ export function MatrixComparison({ step, columns }) {
           columns={columns}
           highlightRows={step.modified_rows}
           showRowLabels
+          showHeader
           label={`Matriz antes del paso ${step.index}`}
         />
       </figure>
@@ -23,6 +24,7 @@ export function MatrixComparison({ step, columns }) {
           highlightRows={step.modified_rows}
           pivot={pivot}
           showRowLabels
+          showHeader
           label={`Matriz después del paso ${step.index}`}
         />
       </figure>

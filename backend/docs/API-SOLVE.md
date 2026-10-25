@@ -53,6 +53,7 @@ La respuesta es un objeto JSON plano, sin envoltura `data`. Incluye siempre:
 | `size` | Tamaño heredado para sistemas cuadrados; `null` en sistemas rectangulares. |
 | `rows`, `columns` | Dimensiones de ecuaciones e incógnitas. |
 | `variables` | Incógnitas (`a`, `b`, `c`, `d`, `e`). |
+| `rank`, `augmented_rank` | Rango de A (número de pivotes) y rango de la matriz aumentada [A|b]. |
 | `classification` | `unique`, `infinite` o `inconsistent`. |
 | `solution` | Objeto de valores exactos si la solución es única; si no, `null`. |
 | `free_variables` | Variables libres en soluciones infinitas; si no, `[]`. |

@@ -453,18 +453,15 @@
   color: var(--gj-text);
 }
 
-/* MATRICES */
+/* MATRICES (una sola tabla: corchetes dibujados con bordes de la primera y última columna) */
 
 .matrix {
   --matrix-cell: 2.75rem;
-  display: inline-flex;
-  align-items: stretch;
-  gap: 4px;
-  max-width: 100%;
-}
-
-.matrix--sm td {
-  height: 2rem !important;
+  --matrix-bracket: var(--gj-primary);
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: Consolas, "Cascadia Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 .matrix--sm {
@@ -472,67 +469,93 @@
   font-size: 0.82rem;
 }
 
-.matrix__bracket {
-  width: 9px;
-  flex: none;
-  border: 2px solid var(--gj-primary);
-  border-radius: 3px;
-}
-
-.matrix__bracket--left {
-  border-right: 0;
-}
-
-.matrix__bracket--right {
-  border-left: 0;
-}
-
-.matrix__table {
-  border-collapse: separate;
-  border-spacing: 0;
-  font-family: Consolas, "Cascadia Mono", ui-monospace, monospace;
-}
-
-.matrix__table td {
+.matrix td {
   min-width: var(--matrix-cell);
   height: 2.4rem;
   padding: 2px 6px;
   text-align: center;
   white-space: nowrap;
+  background-repeat: no-repeat;
   transition: background-color 0.2s ease;
 }
 
-.matrix__table td.matrix__rhs {
-  border-left: 2px solid #9aa5b8;
+.matrix--sm td {
+  height: 2rem;
 }
 
-.matrix__table tr.matrix__row--hl td {
-  background: #fff4d6;
+/* Corchetes: línea vertical + remates de 8px arriba y abajo */
+.matrix td.matrix__edge-l {
+  border-left: 2px solid var(--matrix-bracket);
 }
 
-.matrix__table tr.matrix__row--hl td:first-child {
-  border-radius: 8px 0 0 8px;
+.matrix td.matrix__edge-r {
+  border-right: 2px solid var(--matrix-bracket);
 }
 
-.matrix__table tr.matrix__row--hl td:last-child {
-  border-radius: 0 8px 8px 0;
+.matrix td.matrix__edge-l.matrix__edge--top,
+.matrix td.matrix__edge-r.matrix__edge--top {
+  background-image: linear-gradient(var(--matrix-bracket), var(--matrix-bracket));
+  background-size: 8px 2px;
 }
 
-.matrix__table tr.matrix__row--danger td {
-  background: #ffe6e6;
+.matrix td.matrix__edge-l.matrix__edge--bottom,
+.matrix td.matrix__edge-r.matrix__edge--bottom {
+  background-image: linear-gradient(var(--matrix-bracket), var(--matrix-bracket));
+  background-size: 8px 2px;
 }
 
-.matrix__table td.matrix__pivot {
-  box-shadow: inset 0 0 0 2px var(--gj-primary);
-  border-radius: 8px;
-  font-weight: 700;
+.matrix td.matrix__edge-l.matrix__edge--top { background-position: left top; }
+.matrix td.matrix__edge-r.matrix__edge--top { background-position: right top; }
+.matrix td.matrix__edge-l.matrix__edge--bottom { background-position: left bottom; }
+.matrix td.matrix__edge-r.matrix__edge--bottom { background-position: right bottom; }
+
+/* Matriz de una sola fila: remates arriba y abajo */
+.matrix tbody tr:only-child td.matrix__edge-l,
+.matrix tbody tr:only-child td.matrix__edge-r {
+  background-image: linear-gradient(var(--matrix-bracket), var(--matrix-bracket)), linear-gradient(var(--matrix-bracket), var(--matrix-bracket));
+  background-size: 8px 2px, 8px 2px;
+}
+
+.matrix td.matrix__rhs,
+.matrix th.matrix__rhs {
+  border-left: 1.5px solid #9aa5b8;
+}
+
+.matrix__head {
+  padding: 0 6px 4px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.78em;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--gj-muted);
+  text-align: center;
+}
+
+.matrix th.matrix__head.matrix__rhs {
+  font-style: normal;
 }
 
 .matrix__row-label {
-  min-width: 2.2rem !important;
-  color: var(--gj-muted);
-  font-size: 0.75em;
+  padding: 0 8px 0 0;
   font-family: var(--font-sans, sans-serif);
+  font-size: 0.75em;
+  font-weight: 600;
+  color: var(--gj-muted);
+  text-align: right;
+}
+
+.matrix tr.matrix__row--hl td {
+  background-color: #fff4d6;
+}
+
+.matrix tr.matrix__row--danger td {
+  background-color: #ffe6e6;
+}
+
+.matrix td.matrix__pivot {
+  box-shadow: inset 0 0 0 2px var(--gj-primary);
+  border-radius: 8px;
+  font-weight: 700;
 }
 
 /* FRACCIONES */

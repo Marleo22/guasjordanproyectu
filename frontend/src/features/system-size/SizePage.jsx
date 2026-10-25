@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
@@ -75,6 +75,7 @@ function SizePage() {
               ))}
             </select>
           </label>
+          <ShapePreview rows={rows} columns={columns} />
         </div>
       </fieldset>
 
@@ -82,7 +83,8 @@ function SizePage() {
         <p>
           Sistema seleccionado: <strong>{dimensionLabel(rows, columns)}</strong>
           <span className="block text-sm">
-            Matriz aumentada de {rows} filas × {columns + 1} columnas
+            {rows} filas (ecuaciones) × {columns} columnas (incógnitas) · la matriz aumentada suma 1 columna
+            para el término independiente: {rows} × {columns + 1}
           </span>
         </p>
 
@@ -92,6 +94,32 @@ function SizePage() {
         </Button>
       </Card>
     </section>
+  )
+}
+
+/** Dibujo mínimo de la forma: una fila por ecuación, una columna por incógnita y la columna b. */
+function ShapePreview({ rows, columns }) {
+  return (
+    <figure className="m-0 flex flex-col items-center gap-1" aria-label={`Forma: ${rows} filas y ${columns} columnas más el término independiente`}>
+      <div
+        className="grid gap-1 rounded-md border-x-2 border-primary px-1.5 py-1"
+        style={{ gridTemplateColumns: `repeat(${columns}, 0.9rem) 2px 0.9rem` }}
+        aria-hidden="true"
+      >
+        {Array.from({ length: rows }).map((_, i) => (
+          <Fragment key={i}>
+            {Array.from({ length: columns }).map((__, j) => (
+              <span key={j} className="size-3.5 rounded-sm bg-primary/70" />
+            ))}
+            <span className="h-3.5 w-0.5 bg-muted-foreground/60" />
+            <span className="size-3.5 rounded-sm bg-muted-foreground/40" />
+          </Fragment>
+        ))}
+      </div>
+      <figcaption className="text-xs text-muted-foreground">
+        {rows} × {columns} + término independiente
+      </figcaption>
+    </figure>
   )
 }
 

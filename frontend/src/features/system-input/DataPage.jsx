@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { DimensionSummary, shapeExplanation } from '@/components/matrix/DimensionSummary'
 import Badge from '@/components/ui/Badge'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
@@ -51,6 +52,10 @@ export default function DataPage() {
           Escribe enteros, decimales o fracciones como <code className="rounded bg-muted px-1">1/3</code>. Escribe 0
           en la variable que no aparece en una ecuación.
         </p>
+        <DimensionSummary rows={state.rows} columns={state.columns} />
+        {shapeExplanation(state.rows, state.columns) && (
+          <p className="m-0 max-w-3xl text-sm text-muted-foreground">{shapeExplanation(state.rows, state.columns)}</p>
+        )}
       </header>
 
       <div className="flex flex-wrap items-center gap-2">
