@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Procedimiento · Gauss-Jordan paso a paso</title>
+  <link rel="stylesheet" href="css/matrices.css">
+  <link rel="stylesheet" href="css/procedimiento.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-block">
+      <div class="logo" aria-hidden="true">GJ</div>
+      <div>
+        <div class="brand-title">Gauss-Jordan paso a paso</div>
+        <div class="brand-subtitle">Proyecto de Álgebra Lineal</div>
+      </div>
+    </div>
+    <nav class="stepper" aria-label="Etapas del proyecto">
+      <span class="step done"><b>✓</b> Tamaño</span><i></i>
+      <span class="step done"><b>✓</b> Datos</span><i></i>
+      <span class="step active"><b>3</b> Procedimiento</span><i></i>
+      <span class="step"><b>4</b> Resultado</span>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-heading">
+      <div>
+        <p class="eyebrow">Módulo de Daniel · visualización matemática</p>
+        <h1>Procedimiento paso a paso</h1>
+        <p class="lead" id="procedure-subtitle">Sistema 3 × 3 · operaciones elementales hasta la forma escalonada reducida</p>
+      </div>
+      <div class="heading-actions">
+        <label class="fixture-control" for="fixture-select">Ejemplo local
+          <select id="fixture-select" aria-label="Seleccionar ejemplo local">
+            <option value="unique">Única</option>
+            <option value="infinite">Infinitas</option>
+            <option value="inconsistent">Sin solución</option>
+            <option value="fractions">Fracciones</option>
+          </select>
+        </label>
+        <span class="step-count" id="step-count" aria-live="polite">Paso 1 de 7</span>
+        <button class="button secondary" id="previous-button" type="button">◀ Anterior</button>
+        <button class="button primary" id="next-button" type="button">Siguiente ▶</button>
+      </div>
+    </section>
+
+    <section class="procedure-layout" aria-label="Procedimiento de eliminación">
+      <aside class="card operations-panel">
+        <div class="card-heading"><h2>Operaciones</h2><span class="muted" id="operation-total">7 pasos</span></div>
+        <div id="operation-list" class="operation-list"></div>
+      </aside>
+
+      <article class="card procedure-panel" aria-live="polite">
+        <div class="procedure-kicker" id="procedure-kicker">Paso 1 · Operación entre filas</div>
+        <h2 class="operation-title" id="operation-title">F₂ ← F₂ − 2F₁</h2>
+        <p class="operation-explanation" id="operation-explanation"></p>
+        <div class="calculation-box">
+          <span class="muted">Cálculo</span>
+          <code id="operation-calculation"></code>
+        </div>
+        <div class="comparison-grid">
+          <section><h3>Antes</h3><div id="before-matrix"></div></section>
+          <div class="comparison-arrow" aria-hidden="true">➜</div>
+          <section><h3 class="after-heading">Después</h3><div id="after-matrix"></div></section>
+        </div>
+        <div class="legend"><span class="legend-swatch"></span> Fila modificada en este paso</div>
+      </article>
+    </section>
+
+    <section class="all-matrices-section">
+      <div class="section-heading">
+        <div><h2>Vista completa: todas las matrices</h2><p class="muted">Matriz inicial y cada matriz intermedia con la operación aplicada.</p></div>
+        <button class="text-button" id="toggle-all-button" type="button">Ver solo el paso actual</button>
+      </div>
+      <div id="all-matrices" class="all-matrices-grid"></div>
+    </section>
+
+    <footer class="page-footer">
+      <a class="button secondary" href="datos.html">← Editar datos</a>
+      <a class="button primary" href="resultado.html">Ver resultado →</a>
+    </footer>
+  </main>
+
+  <script src="js/solver-fixtures.js"></script>
+  <script src="js/matrix-renderer.js"></script>
+  <script src="js/procedimiento.js"></script>
+</body>
+</html>

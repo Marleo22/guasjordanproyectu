@@ -1,0 +1,30 @@
+.procedure-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px; }
+.operations-panel, .procedure-panel { padding: 28px; }
+.operation-list { display: flex; flex-direction: column; gap: 5px; margin-top: 22px; }
+.operation-item { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; width: 100%; padding: 10px 8px; border: 0; border-radius: 10px; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
+.operation-item:hover { background: var(--code); }
+.operation-item:focus-visible { outline: 3px solid rgba(80,70,229,.22); }
+.operation-item.active { background: var(--violet-soft); }
+.operation-dot { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--code); color: var(--muted); font-size: .8rem; font-weight: 800; }
+.operation-item.done .operation-dot { background: var(--green-soft); color: var(--green); }
+.operation-item.active .operation-dot { background: var(--violet); color: #fff; }
+.operation-name { font-size: .84rem; line-height: 1.25; }
+.operation-name small { display: block; margin-bottom: 2px; color: var(--muted); font-size: .72rem; }
+.procedure-kicker { display: inline-block; padding: 6px 11px; border-radius: 999px; background: var(--violet-soft); color: var(--violet); font-size: .8rem; font-weight: 800; }
+.operation-title { margin-top: 22px; color: var(--violet); font-size: clamp(2rem, 4vw, 3.2rem); }
+.operation-explanation { max-width: 75ch; margin-top: 14px; color: #34455e; font-size: 1.03rem; }
+.calculation-box { display: flex; flex-direction: column; gap: 5px; margin-top: 22px; padding: 15px 18px; border-radius: 12px; background: var(--code); }
+.calculation-box code { color: var(--ink); font-size: .95rem; white-space: pre-wrap; }
+.comparison-grid { display: grid; grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); align-items: center; gap: 12px; margin-top: 24px; }
+.comparison-grid section { min-width: 0; }
+.comparison-grid h3 { margin-bottom: 5px; color: var(--muted); }
+.comparison-grid .after-heading { color: var(--violet); }
+.comparison-arrow { color: var(--muted); font-size: 2rem; text-align: center; }
+.legend { display: flex; align-items: center; gap: 8px; margin-top: 16px; color: var(--muted); font-size: .84rem; }
+.legend-swatch { width: 18px; height: 18px; border-radius: 4px; background: var(--amber-soft); }
+.all-matrices-section { margin-top: 42px; }
+.all-matrices-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+
+@media (max-width: 1120px) { .all-matrices-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .procedure-layout { grid-template-columns: 1fr; } .all-matrices-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .operations-panel, .procedure-panel { padding: 20px; } .comparison-grid { grid-template-columns: 1fr; } .comparison-arrow { transform: rotate(90deg); } .all-matrices-grid { grid-template-columns: 1fr; } }

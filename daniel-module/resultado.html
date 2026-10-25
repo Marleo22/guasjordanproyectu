@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resultado · Gauss-Jordan paso a paso</title>
+  <link rel="stylesheet" href="css/matrices.css">
+  <link rel="stylesheet" href="css/resultado.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-block">
+      <div class="logo" aria-hidden="true">GJ</div>
+      <div><div class="brand-title">Gauss-Jordan paso a paso</div><div class="brand-subtitle">Proyecto de Álgebra Lineal</div></div>
+    </div>
+    <nav class="stepper" aria-label="Etapas del proyecto">
+      <span class="step done"><b>✓</b> Tamaño</span><i></i>
+      <span class="step done"><b>✓</b> Datos</span><i></i>
+      <span class="step done"><b>✓</b> Procedimiento</span><i></i>
+      <span class="step active"><b>4</b> Resultado</span>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-heading result-heading">
+      <div><p class="eyebrow">Módulo de Daniel · resultado</p><h1>Resultado</h1><p class="lead">La clasificación se toma directamente de la forma escalonada reducida recibida.</p></div>
+      <label class="fixture-control" for="fixture-select">Ejemplo local
+        <select id="fixture-select" aria-label="Seleccionar ejemplo local">
+          <option value="unique">Única</option><option value="infinite">Infinitas</option><option value="inconsistent">Sin solución</option><option value="fractions">Fracciones</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="result-layout" aria-live="polite">
+      <article class="card result-card" id="result-summary"></article>
+      <article class="card rref-card"><h2>Forma escalonada reducida</h2><div id="rref-matrix"></div><p class="muted" id="rref-caption"></p></article>
+    </section>
+
+    <section class="other-results-section">
+      <div class="section-heading"><div><h2>Otros resultados que la app detecta</h2><p class="muted">La misma vista cambia según <code>classification</code>.</p></div></div>
+      <div id="other-results" class="other-results-grid"></div>
+    </section>
+
+    <footer class="page-footer">
+      <a class="button secondary" href="procedimiento.html">← Ver procedimiento</a>
+      <button class="button secondary" id="pdf-button" type="button">Descargar pasos (PDF)</button>
+      <a class="button primary" href="procedimiento.html">Resolver otro sistema →</a>
+    </footer>
+    <p class="download-note" id="download-note" role="status"></p>
+  </main>
+
+  <script src="js/solver-fixtures.js"></script>
+  <script src="js/matrix-renderer.js"></script>
+  <script src="js/resultado.js"></script>
+</body>
+</html>
